@@ -4,24 +4,33 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Hello Blog，Hello Hexo | 0Evin的博客</title>
+  <title>Linux源码学习笔记（一） | 0Evin的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="新的开始工作两年才开始写技术博客是晚了点，不过最近感觉个人水平遇到了瓶颈，通过写技术博客相信是能大幅提高自己的水平再也不能小打小闹。
-一年前也用过hexo，不过那时候对命令行这些不是很熟。 框架搭完，页面出来就算了。这次重新开了域名，希望有一个崭新的开始。
-这个博客主要内容是我未来的学习方向以及随笔，主要有Python和Linux。">
+  <meta name="description" content="0x00 前言该笔记基于Linux0.11版，源码可自从网上下载。
+参考书籍:
+
+赵炯《Linux内核完全注释》
+
+0x01 基础">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello Blog，Hello Hexo">
-<meta property="og:url" content="http://0evin.com/2016/02/25/Hello-Blog-Hello-Hexo/index.html">
+<meta property="og:title" content="Linux源码学习笔记（一）">
+<meta property="og:url" content="http://0evin.com/2016/02/25/Linux源码学习/index.html">
 <meta property="og:site_name" content="0Evin的博客">
-<meta property="og:description" content="新的开始工作两年才开始写技术博客是晚了点，不过最近感觉个人水平遇到了瓶颈，通过写技术博客相信是能大幅提高自己的水平再也不能小打小闹。
-一年前也用过hexo，不过那时候对命令行这些不是很熟。 框架搭完，页面出来就算了。这次重新开了域名，希望有一个崭新的开始。
-这个博客主要内容是我未来的学习方向以及随笔，主要有Python和Linux。">
-<meta property="og:updated_time" content="2016-02-25T03:46:00.000Z">
+<meta property="og:description" content="0x00 前言该笔记基于Linux0.11版，源码可自从网上下载。
+参考书籍:
+
+赵炯《Linux内核完全注释》
+
+0x01 基础">
+<meta property="og:updated_time" content="2016-03-14T14:41:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello Blog，Hello Hexo">
-<meta name="twitter:description" content="新的开始工作两年才开始写技术博客是晚了点，不过最近感觉个人水平遇到了瓶颈，通过写技术博客相信是能大幅提高自己的水平再也不能小打小闹。
-一年前也用过hexo，不过那时候对命令行这些不是很熟。 框架搭完，页面出来就算了。这次重新开了域名，希望有一个崭新的开始。
-这个博客主要内容是我未来的学习方向以及随笔，主要有Python和Linux。">
+<meta name="twitter:title" content="Linux源码学习笔记（一）">
+<meta name="twitter:description" content="0x00 前言该笔记基于Linux0.11版，源码可自从网上下载。
+参考书籍:
+
+赵炯《Linux内核完全注释》
+
+0x01 基础">
   
     <link rel="alternative" href="/atom.xml" title="0Evin的博客" type="application/atom+xml">
   
@@ -118,7 +127,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+						<a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Linux-汇编/" style="font-size: 10px;">Linux 汇编</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
 					</div>
 				</section>
 				
@@ -186,11 +195,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-Hello-Blog-Hello-Hexo" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="linux-Linux源码学习" class="article article-type-linux" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/25/Hello-Blog-Hello-Hexo/" class="article-date">
-  	<time datetime="2016-02-25T03:13:23.000Z" itemprop="datePublished">2016-02-25</time>
+      <a href="/2016/02/25/Linux源码学习/" class="article-date">
+  	<time datetime="2016-02-25T07:53:52.000Z" itemprop="datePublished">2016-02-25</time>
 </a>
     </div>
   
@@ -203,7 +212,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello Blog，Hello Hexo
+      Linux源码学习笔记（一）
     </h1>
   
 
@@ -212,7 +221,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
 	</div>
 
         
@@ -223,10 +232,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="新的开始"><a href="#新的开始" class="headerlink" title="新的开始"></a>新的开始</h4><p>工作两年才开始写技术博客是晚了点，不过最近感觉个人水平遇到了瓶颈，通过写技术博客相信是能大幅提高自己的水平再也不能小打小闹。</p>
-<p>一年前也用过hexo，不过那时候对命令行这些不是很熟。 框架搭完，页面出来就算了。这次重新开了域名，希望有一个崭新的开始。</p>
-<p>这个博客主要内容是我未来的学习方向以及随笔，主要有Python和Linux。</p>
-
+        <h4 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h4><p>该笔记基于Linux0.11版，源码可自从网上下载。</p>
+<p>参考书籍:</p>
+<ul>
+<li>赵炯《Linux内核完全注释》</li>
+</ul>
+<h4 id="0x01-基础"><a href="#0x01-基础" class="headerlink" title="0x01 基础"></a>0x01 基础</h4>
       
     </div>
     
@@ -235,15 +246,20 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/02/25/0Evin- Linux0.11 源码学习笔记（一）/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/02/25/段间跳转指令jmpi和实模式寻址/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          Linux源码学习笔记（一）
+          段间跳转指令jmpi和实模式寻址（转）
         
       </div>
     </a>
   
+  
+    <a href="/2016/02/25/Hello World,Hello Hexo/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello Blog，Hello Hexo</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
   
 </nav>
 
@@ -276,7 +292,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Hello-Blog-Hello-Hexo" data-title="Hello Blog，Hello Hexo" data-url="http://0evin.com/2016/02/25/Hello-Blog-Hello-Hexo/"></div>
+	<div class="ds-thread" data-thread-key="Linux源码学习" data-title="Linux源码学习笔记（一）" data-url="http://0evin.com/2016/02/25/Linux源码学习/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
