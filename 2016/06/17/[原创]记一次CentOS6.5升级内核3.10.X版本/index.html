@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>[原创]记一次CentOS6.5升级内核3.10.X版本 | 0Evin的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核
+0x01 准备工作
+查看当前系统内核版本,两种方法皆可
+1234[root@beiyang1 ~]# uname -aLinux beiyang1 2.6.32-642.el6.x86_64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[原创]记一次CentOS6.5升级内核3.10.X版本">
+<meta property="og:url" content="http://0evin.com/2016/06/17/[原创]记一次CentOS6.5升级内核3.10.X版本/index.html">
+<meta property="og:site_name" content="0Evin的博客">
+<meta property="og:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核
+0x01 准备工作
+查看当前系统内核版本,两种方法皆可
+1234[root@beiyang1 ~]# uname -aLinux beiyang1 2.6.32-642.el6.x86_64">
+<meta property="og:image" content="https://sfault-image.b0.upaiyun.com/125/833/1258330173-54d6e37eac46a">
+<meta property="og:updated_time" content="2016-06-18T06:50:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[原创]记一次CentOS6.5升级内核3.10.X版本">
+<meta name="twitter:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核
+0x01 准备工作
+查看当前系统内核版本,两种方法皆可
+1234[root@beiyang1 ~]# uname -aLinux beiyang1 2.6.32-642.el6.x86_64">
+  
+    <link rel="alternative" href="/atom.xml" title="0Evin的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">王俊</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/Linux">Linux</a></li>
+				        
+							<li><a href="/tags/Pythom">Pythom</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/wjff10" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/wangjuntz" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/wang-xiao-jun-30-35" title="zhihu">zhihu</a>
+					        
+								<a class="wuyun" target="_blank" href="/#" title="wuyun">wuyun</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Linux/" style="font-size: 20px;">Linux</a> <a href="/tags/Linux-汇编/" style="font-size: 10px;">Linux 汇编</a> <a href="/tags/Linux-Docker/" style="font-size: 10px;">Linux,Docker</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">虽然自知终须一败，但请再多坚持一会，别向这个操蛋的世界投降</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">王俊</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">王俊</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/Linux">Linux</a></li>
+		        
+					<li><a href="/tags/Pythom">Pythom</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/wjff10" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/wangjuntz" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/wang-xiao-jun-30-35" title="zhihu">zhihu</a>
+			        
+						<a class="wuyun" target="_blank" href="/#" title="wuyun">wuyun</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-[原创]记一次CentOS6.5升级内核3.10.X版本" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/17/[原创]记一次CentOS6.5升级内核3.10.X版本/" class="article-date">
+  	<time datetime="2016-06-17T03:08:00.000Z" itemprop="datePublished">2016-06-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      [原创]记一次CentOS6.5升级内核3.10.X版本
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核</p>
+<h2 id="0x01-准备工作"><a href="#0x01-准备工作" class="headerlink" title="0x01 准备工作"></a><em>0x01 准备工作</em></h2><ol>
+<li><p>查看当前系统内核版本,两种方法皆可</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@beiyang1 ~]<span class="comment"># uname -a</span></span><br><span class="line">Linux beiyang1 <span class="number">2.6</span>.<span class="number">32</span>-<span class="number">642</span>.el6.x86_64 <span class="comment">#1 SMP Tue May 10 17:27:01 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line">[root@beiyang1 ~]<span class="comment"># uname -r</span></span><br><span class="line"><span class="number">2.6</span>.<span class="number">32</span>-<span class="number">642</span>.el6.x86_64</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>升级一下系统</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum update</span><br><span class="line">yum upgrade</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装必需的组件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install vim wget</span><br><span class="line">yum install gcc gcc-c++ xz</span><br><span class="line">yum install bc</span><br><span class="line">yum install ncurses-devel</span><br><span class="line">yum install hmaccalc zlib-devel binutils-devel elfutils-libelf-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载内核包(记得目录别错了,下面的操作都是在该目录操作)<br>大家也可以直接打开<a href="https://www.kernel.org/pub/linux/kernel/v3.x/" target="_blank" rel="external">下载目录</a>查找自己喜欢的内核.<br>另外,如果你的服务器不在国外.还是用迅雷下载吧. wget 慢的不行.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@beiyang1 ~]<span class="comment"># cd /usr/local/src/</span></span><br><span class="line">[root@beiyang1 ~]<span class="comment"># wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.1.tar.xz</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解包，进行内核源码目录</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -vxf linux-<span class="number">3.12</span>.<span class="number">17</span>.tar.xz</span><br><span class="line"><span class="built_in">cd</span> linux-<span class="number">3.12</span>.<span class="number">17</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这里有两条支线 1.用原来的内核配置 2.用自己的配置</p>
+<h4 id="用原来的内核配置"><a href="#用原来的内核配置" class="headerlink" title="用原来的内核配置"></a>用原来的内核配置</h4><p>复制原配置文件到编译目录(前面记下的内核号派上用场了)<br><code>cp /boot/config-2.6.32-642.el6.x86_64 .config</code></p>
+<h4 id="用自己的配置"><a href="#用自己的配置" class="headerlink" title="用自己的配置"></a>用自己的配置</h4><p>!!!!!如果是装 Docker 的孩子别忘了把 Croute 选上. 哎,说多都是泪</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="https://sfault-image.b0.upaiyun.com/125/833/1258330173-54d6e37eac46a" alt=""></p>
+<ol>
+<li><p>编译内核 （需时40-60分钟不等）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装内核</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make modules_install install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更改系统启动时，使用的内核<br>注意 网上搜的地址都是<code>/boot/grub/menu.lst</code> 偏偏我的是<code>/boot/efi/EFI/redhat/grub.conf</code><br>所以大家找不到也没关系,用 find 搜索下就行了<br>找到后 vim 一下,修改default=0，开机后，默认以第一项启动（3.10.1内核）<br>保存退出</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name grbu.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启系统</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shutdown -r now</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>确认当前内核版本</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">　　[root@beiyang1 ~]<span class="comment"># uname -r</span></span><br><span class="line">　　Linux beiyang1 <span class="number">3.10</span>.<span class="number">1</span> <span class="comment">#1 SMP Fri Apr 11 03:32:42 CST 2014 x86_64 x86_64 x86_64 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果编译失败，可以先清除，再重新编译</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">　　[root@beiyang1 ~]<span class="comment"># cd /usr/local/src/linux-3.12.17</span></span><br><span class="line">　　[root@beiyang1 ~]<span class="comment"># make mrproper         #完成或者安装过程出错，可以清理上次编译的现场</span></span><br><span class="line">　　[root@beiyang1 ~]<span class="comment"># make clean</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果升级成功后，可以删除源码目录</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　　[root@beiyang1 ~]<span class="comment"># rm -rf /usr/local/src/linux-3.12.17</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看当前有什么内核版本</p>
+</li>
+<li><p>删除原内核</p>
+</li>
+</ol>
+<p>　　[root@beiyang1 ~]# yum remove kernel-2.6.32-431.el6.x86_64 #移除此版本的内核，同时启动菜单也不再会出现此内核<br>　　[root@beiyang1 ~]# yum remove kernel-2.6.32-431.11.2.el6.x86_64</p>
+<p>　　删除后，查看启动菜单会发现已经少了此内核</p>
+<p>　　[root@centos ~]# cat /boot/grub/menu.lst</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/06/17/[原创]CentOS6.5安装Docker1.11.X版本/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">[原创]CentOS6.5 CentOS 7安装 Docker 1.11.X 的步骤和坑们</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="[原创]记一次CentOS6.5升级内核3.10.X版本" data-title="[原创]记一次CentOS6.5升级内核3.10.X版本" data-url="http://0evin.com/2016/06/17/[原创]记一次CentOS6.5升级内核3.10.X版本/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 王俊
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

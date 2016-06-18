@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>[原创]CentOS6.5 CentOS 7安装 Docker 1.11.X 的步骤和坑们 | 0Evin的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于最近公司有套系统上线,手上有了几台服务器管理权限,所以想试试传说中的 Docker 和 Rancher.
+公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.
+0x01 CentOS 6.5 安装步骤
+首先最好还是先更新下系统
+12yum updateyum upg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[原创]CentOS6.5 CentOS 7安装 Docker 1.11.X 的步骤和坑们">
+<meta property="og:url" content="http://0evin.com/2016/06/17/[原创]CentOS6.5安装Docker1.11.X版本/index.html">
+<meta property="og:site_name" content="0Evin的博客">
+<meta property="og:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于最近公司有套系统上线,手上有了几台服务器管理权限,所以想试试传说中的 Docker 和 Rancher.
+公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.
+0x01 CentOS 6.5 安装步骤
+首先最好还是先更新下系统
+12yum updateyum upg">
+<meta property="og:updated_time" content="2016-06-17T03:15:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[原创]CentOS6.5 CentOS 7安装 Docker 1.11.X 的步骤和坑们">
+<meta name="twitter:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于最近公司有套系统上线,手上有了几台服务器管理权限,所以想试试传说中的 Docker 和 Rancher.
+公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.
+0x01 CentOS 6.5 安装步骤
+首先最好还是先更新下系统
+12yum updateyum upg">
+  
+    <link rel="alternative" href="/atom.xml" title="0Evin的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">王俊</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/Linux">Linux</a></li>
+				        
+							<li><a href="/tags/Pythom">Pythom</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/wjff10" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/wangjuntz" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/wang-xiao-jun-30-35" title="zhihu">zhihu</a>
+					        
+								<a class="wuyun" target="_blank" href="/#" title="wuyun">wuyun</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Linux/" style="font-size: 20px;">Linux</a> <a href="/tags/Linux-汇编/" style="font-size: 10px;">Linux 汇编</a> <a href="/tags/Linux-Docker/" style="font-size: 10px;">Linux,Docker</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">虽然自知终须一败，但请再多坚持一会，别向这个操蛋的世界投降</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">王俊</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">王俊</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/Linux">Linux</a></li>
+		        
+					<li><a href="/tags/Pythom">Pythom</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/wjff10" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/wangjuntz" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/wang-xiao-jun-30-35" title="zhihu">zhihu</a>
+			        
+						<a class="wuyun" target="_blank" href="/#" title="wuyun">wuyun</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-[原创]CentOS6.5安装Docker1.11.X版本" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/17/[原创]CentOS6.5安装Docker1.11.X版本/" class="article-date">
+  	<time datetime="2016-06-17T01:33:23.000Z" itemprop="datePublished">2016-06-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      [原创]CentOS6.5 CentOS 7安装 Docker 1.11.X 的步骤和坑们
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux-Docker/">Linux,Docker</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;由于最近公司有套系统上线,手上有了几台服务器管理权限,所以想试试传说中的 Docker 和 Rancher.</p>
+<p>公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.</p>
+<h2 id="0x01-CentOS-6-5-安装步骤"><a href="#0x01-CentOS-6-5-安装步骤" class="headerlink" title="0x01 CentOS 6.5 安装步骤"></a><em>0x01 CentOS 6.5 安装步骤</em></h2><ol>
+<li><p>首先最好还是先更新下系统</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum update</span><br><span class="line">yum upgrade</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二步就比较蛋疼了,需要更新系统内核,由于步骤过长,所以专门开了篇文章来写<br><a href="/2016/06/17/[原创]记一次CentOS6.5升级内核3.10.X版本/">[原创]记一次CentOS6.5升级内核3.10.X版本</a></p>
+</li>
+</ol>
+<h2 id="0x02-CentOS-7-安装步骤"><a href="#0x02-CentOS-7-安装步骤" class="headerlink" title="0x02 CentOS 7 安装步骤"></a><em>0x02 CentOS 7 安装步骤</em></h2><ol>
+<li><p>以直接安装yum提供的 Docker</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后执行下面命令就可以愉快的玩 Docker 了. 没错,是玩</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker.service</span><br><span class="line">systemctl <span class="built_in">enable</span> docker.service</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>但是yum安装的版本是1.9.X 版本的,不符合我们的文章主旨,所以放弃.<br>另外已经 yum 安装的朋友,要卸载也很简单(本人遇过的坑….以为直接 remove 就行. ).查出你已经安装的模块 然后 yum remove 他们.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum list | grep docker</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<ol>
+<li>好了,以下步骤才是安装最近版本的 Docker步骤. 其他Linux 发行版的孩子可以参考 <a href="https://docs.docker.com/linux/step_one/" target="_blank" rel="external">官网教程</a></li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://get.docker.com/ | sh</span><br></pre></td></tr></table></figure>
+<ol>
+<li>没错,就一句.我们可爱的 Docker 就安装好了</li>
+</ol>
+<h2 id="0x03-疑难杂症和坑们"><a href="#0x03-疑难杂症和坑们" class="headerlink" title="0x03 疑难杂症和坑们"></a><em>0x03 疑难杂症和坑们</em></h2><p>如果你遇到了以下错误,那肯定是以前用yum 装了老版本,快用上面的方法删干净吧<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Warning: the <span class="string">"docker"</span> <span class="built_in">command</span> appears to already exist on this system.</span><br><span class="line"></span><br><span class="line">If you already have Docker installed, this script can cause trouble, <span class="built_in">which</span> is</span><br><span class="line">why we are displaying this warning and provide the opportunity to cancel the</span><br><span class="line">installation.</span><br><span class="line"></span><br><span class="line">If you installed the current Docker package using this script and are using it</span><br><span class="line">again to update Docker, you can safely ignore this message.</span><br><span class="line"></span><br><span class="line">You may press Ctrl+C now to abort this script.</span><br></pre></td></tr></table></figure></p>
+<p>如果遇到 Docker 启动失败 然后 systemctl status docker.service 发现下列错误</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">firewalld.service - firewalld - dynamic firewall daemon</span><br><span class="line">Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled)</span><br><span class="line">Active: active (running) since 五 <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">16</span> CST; <span class="number">1</span>min <span class="number">40</span>s ago</span><br><span class="line">Main PID: <span class="number">879</span> (firewalld)</span><br><span class="line">CGroup: /system.slice/firewalld.service</span><br><span class="line">└─<span class="number">879</span> /usr/bin/python -Es /usr/sbin/firewalld --nofork --nopid</span><br><span class="line"></span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C POSTROUTING -s 172.17.42.1/16 ! -o docker0 -j MASQUERADE'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -D FORWARD -i docker0 -o docker0 -j DROP'</span> failed: iptables: Bad rule (does a matching rule exist <span class="keyword">in</span> that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -i docker0 -o docker0 -j ACCEPT'</span> failed: iptables: Bad rule (does a matching rule ...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -i docker0 ! -o docker0 -j ACCEPT'</span> failed: iptables: Bad rule (does a matching rul...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT'</span> failed: iptables:...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -n -L DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C PREROUTING -m addrtype --dst-type LOCAL -j DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C OUTPUT -m addrtype --dst-type LOCAL -j DOCKER ! --dst 127.0.0.0/8'</span> failed: iptables: No chain...ch by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -n -L DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -o docker0 -j DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br></pre></td></tr></table></figure>
+<p>那就先暂时关掉 firewalld 再启动<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/06/17/[原创]记一次CentOS6.5升级内核3.10.X版本/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          [原创]记一次CentOS6.5升级内核3.10.X版本
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/02/25/段间跳转指令jmpi和实模式寻址/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">段间跳转指令jmpi和实模式寻址（转）</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="[原创]CentOS6.5安装Docker1.11.X版本" data-title="[原创]CentOS6.5 CentOS 7安装 Docker 1.11.X 的步骤和坑们" data-url="http://0evin.com/2016/06/17/[原创]CentOS6.5安装Docker1.11.X版本/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 王俊
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
