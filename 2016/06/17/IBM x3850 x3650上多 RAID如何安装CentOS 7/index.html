@@ -4,33 +4,27 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Linux源码学习笔记（一） | 0Evin的博客</title>
+  <title>IBM x3850 x3650上多 RAID 如何安装CentOS 7 | 0Evin的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 前言该笔记基于Linux0.11版，源码可自从网上下载。
-参考书籍:
-
-赵炯《Linux内核完全注释》
-
-0x01 基础">
+  <meta name="description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;公司有台IBM 的 x3850需要从 CentOS 6.8 升级到 CentOS 7
+公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.
+0x01 安装准备
+首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux源码学习笔记（一）">
-<meta property="og:url" content="http://0evin.com/2016/02/25/Linux源码学习/index.html">
+<meta property="og:title" content="IBM x3850 x3650上多 RAID 如何安装CentOS 7">
+<meta property="og:url" content="http://0evin.com/2016/06/17/IBM x3850 x3650上多 RAID如何安装CentOS 7/index.html">
 <meta property="og:site_name" content="0Evin的博客">
-<meta property="og:description" content="0x00 前言该笔记基于Linux0.11版，源码可自从网上下载。
-参考书籍:
-
-赵炯《Linux内核完全注释》
-
-0x01 基础">
-<meta property="og:updated_time" content="2016-06-18T14:44:29.000Z">
+<meta property="og:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;公司有台IBM 的 x3850需要从 CentOS 6.8 升级到 CentOS 7
+公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.
+0x01 安装准备
+首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,">
+<meta property="og:updated_time" content="2016-06-20T01:54:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux源码学习笔记（一）">
-<meta name="twitter:description" content="0x00 前言该笔记基于Linux0.11版，源码可自从网上下载。
-参考书籍:
-
-赵炯《Linux内核完全注释》
-
-0x01 基础">
+<meta name="twitter:title" content="IBM x3850 x3650上多 RAID 如何安装CentOS 7">
+<meta name="twitter:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;公司有台IBM 的 x3850需要从 CentOS 6.8 升级到 CentOS 7
+公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.
+0x01 安装准备
+首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,">
   
     <link rel="alternative" href="/atom.xml" title="0Evin的博客" type="application/atom+xml">
   
@@ -195,11 +189,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="linux-Linux源码学习" class="article article-type-linux" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-IBM x3850 x3650上多 RAID如何安装CentOS 7" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/25/Linux源码学习/" class="article-date">
-  	<time datetime="2016-02-25T07:53:52.000Z" itemprop="datePublished">2016-02-25</time>
+      <a href="/2016/06/17/IBM x3850 x3650上多 RAID如何安装CentOS 7/" class="article-date">
+  	<time datetime="2016-06-17T01:33:23.000Z" itemprop="datePublished">2016-06-17</time>
 </a>
     </div>
   
@@ -212,7 +206,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Linux源码学习笔记（一）
+      IBM x3850 x3650上多 RAID 如何安装CentOS 7
     </h1>
   
 
@@ -221,7 +215,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux-Docker/">Linux,Docker</a></li></ul>
 	</div>
 
         
@@ -232,12 +226,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h4><p>该笔记基于Linux0.11版，源码可自从网上下载。</p>
-<p>参考书籍:</p>
-<ul>
-<li>赵炯《Linux内核完全注释》</li>
-</ul>
-<h4 id="0x01-基础"><a href="#0x01-基础" class="headerlink" title="0x01 基础"></a>0x01 基础</h4>
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;公司有台IBM 的 x3850需要从 CentOS 6.8 升级到 CentOS 7</p>
+<p>公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.</p>
+<h2 id="0x01-安装准备"><a href="#0x01-安装准备" class="headerlink" title="0x01 安装准备"></a><em>0x01 安装准备</em></h2><ol>
+<li>首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,U盘装太蛋疼了.</li>
+<li>按 F1 进入 Bios 设置后,然后就是选择 boot 顺序,把 CDROM 或者 USB 调到第一.然后commit 退出.</li>
+<li>然后就进入 CentOS 7安装界面了</li>
+</ol>
+<h2 id="0x02-开始安装"><a href="#0x02-开始安装" class="headerlink" title="0x02 开始安装"></a><em>0x02 开始安装</em></h2><ol>
+<li>选择 第一项 Install CentOS 7</li>
+<li>后面就是选中文,选安装的软件 巴拉巴拉之类地球人都会选的东东</li>
+<li>选择安装硬盘, 这里是本文的重点.<br><em>我的这台 x3850比较奇葩 里面有4块300G 的硬盘和4块1T的硬盘 分别组了两套 RAID 5</em><br>3.1 选择磁盘的时候单选一个是不行的,系统提示必须两个都得选中<br>3.2 下面就是坑了,如果你像常规那样删了老的.然后选 LVM 自动或干脆手动.那么你安装的时候一定会遇到’error populating transaction after 10 retries: failure:’这个错.,我在这一步卡了6 7次,装的我都要崩溃了.一开始是以为包兼容性错误,但是选了最小安装还是报这错.后面灵机一动会不会是RAID 的问题.<br>3.3 原来在 CentOS 7中 你建立所有的 / /boot /home 都是默认共用两个磁盘的.所以你一定得手动把这些挂载点手动挂载到单个 RAID(硬盘)上.我是把/ boot /boot-efi 挂到 sda(300G 那套阵列上).其他都放到 sdb 上面<br>3.4 最后就是漫长的等待了,不明白为啥硬件 RAID 怎么还装的这么慢.难道还是要上SSD 么.有高手指教下吗</li>
+</ol>
+
       
     </div>
     
@@ -246,18 +247,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/02/25/段间跳转指令jmpi和实模式寻址/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/06/17/[原创]CentOS6.5安装Docker1.11.X版本/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          段间跳转指令jmpi和实模式寻址（转）
+          [原创]CentOS6.5 CentOS 7安装 Docker 1.11.X 的步骤和坑们
         
       </div>
     </a>
   
   
-    <a href="/2016/02/25/Hello World,Hello Hexo/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello Blog，Hello Hexo</div>
+    <a href="/2016/02/25/段间跳转指令jmpi和实模式寻址/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">段间跳转指令jmpi和实模式寻址（转）</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -292,7 +293,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Linux源码学习" data-title="Linux源码学习笔记（一）" data-url="http://0evin.com/2016/02/25/Linux源码学习/"></div>
+	<div class="ds-thread" data-thread-key="IBM x3850 x3650上多 RAID如何安装CentOS 7" data-title="IBM x3850 x3650上多 RAID 如何安装CentOS 7" data-url="http://0evin.com/2016/06/17/IBM x3850 x3650上多 RAID如何安装CentOS 7/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
