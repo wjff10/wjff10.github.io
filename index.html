@@ -181,6 +181,74 @@
 
       <div class="body-wrap">
   
+    <article id="post-IBM x3850 x3650上多 RAID如何安装CentOS 7" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/20/IBM x3850 x3650上多 RAID如何安装CentOS 7/" class="article-date">
+  	<time datetime="2016-06-20T01:00:00.000Z" itemprop="datePublished">2016-06-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/20/IBM x3850 x3650上多 RAID如何安装CentOS 7/">IBM x3850 x3650上多 RAID 如何安装CentOS 7</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;公司有台IBM 的 x3850需要从 CentOS 6.8 升级到 CentOS 7</p>
+<p>公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.</p>
+<h2 id="0x01-安装准备"><a href="#0x01-安装准备" class="headerlink" title="0x01 安装准备"></a><em>0x01 安装准备</em></h2><ol>
+<li>首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,U盘装太蛋疼了.</li>
+<li>按 F1 进入 Bios 设置后,然后就是选择 boot 顺序,把 CDROM 或者 USB 调到第一.然后commit 退出.</li>
+<li>然后就进入 CentOS 7安装界面了</li>
+</ol>
+<h2 id="0x02-开始安装"><a href="#0x02-开始安装" class="headerlink" title="0x02 开始安装"></a><em>0x02 开始安装</em></h2><ol>
+<li>选择 第一项 Install CentOS 7</li>
+<li>后面就是选中文,选安装的软件 巴拉巴拉之类地球人都会选的东东</li>
+<li>选择安装硬盘, 这里是本文的重点.<br><em>我的这台 x3850比较奇葩 里面有4块300G 的硬盘和4块1T的硬盘 分别组了两套 RAID 5</em><br>3.1 选择磁盘的时候单选一个是不行的,系统提示必须两个都得选中<br>3.2 下面就是坑了,如果你像常规那样删了老的.然后选 LVM 自动或干脆手动.那么你安装的时候一定会遇到’error populating transaction after 10 retries: failure:’这个错.,我在这一步卡了6 7次,装的我都要崩溃了.一开始是以为包兼容性错误,但是选了最小安装还是报这错.后面灵机一动会不会是RAID 的问题.<br>3.3 原来在 CentOS 7中 你建立所有的 / /boot /home 都是默认共用两个磁盘的.所以你一定得手动把这些挂载点手动挂载到单个 RAID(硬盘)上.我是把/ boot /boot-efi 挂到 sda(300G 那套阵列上).其他都放到 sdb 上面<br>3.4 最后就是漫长的等待了,不明白为啥硬件 RAID 怎么还装的这么慢.难道还是要上SSD 么.有高手指教下吗</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux-Docker/">Linux,Docker</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-[原创]记一次CentOS6.5升级内核3.10.X版本" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -349,74 +417,6 @@
 <p>如果遇到 Docker 启动失败 然后 systemctl status docker.service 发现下列错误</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">firewalld.service - firewalld - dynamic firewall daemon</span><br><span class="line">Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled)</span><br><span class="line">Active: active (running) since 五 <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">16</span> CST; <span class="number">1</span>min <span class="number">40</span>s ago</span><br><span class="line">Main PID: <span class="number">879</span> (firewalld)</span><br><span class="line">CGroup: /system.slice/firewalld.service</span><br><span class="line">└─<span class="number">879</span> /usr/bin/python -Es /usr/sbin/firewalld --nofork --nopid</span><br><span class="line"></span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C POSTROUTING -s 172.17.42.1/16 ! -o docker0 -j MASQUERADE'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -D FORWARD -i docker0 -o docker0 -j DROP'</span> failed: iptables: Bad rule (does a matching rule exist <span class="keyword">in</span> that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -i docker0 -o docker0 -j ACCEPT'</span> failed: iptables: Bad rule (does a matching rule ...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -i docker0 ! -o docker0 -j ACCEPT'</span> failed: iptables: Bad rule (does a matching rul...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT'</span> failed: iptables:...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -n -L DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C PREROUTING -m addrtype --dst-type LOCAL -j DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C OUTPUT -m addrtype --dst-type LOCAL -j DOCKER ! --dst 127.0.0.0/8'</span> failed: iptables: No chain...ch by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -n -L DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -o docker0 -j DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br></pre></td></tr></table></figure>
 <p>那就先暂时关掉 firewalld 再启动<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux-Docker/">Linux,Docker</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-IBM x3850 x3650上多 RAID如何安装CentOS 7" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/17/IBM x3850 x3650上多 RAID如何安装CentOS 7/" class="article-date">
-  	<time datetime="2016-06-17T01:33:23.000Z" itemprop="datePublished">2016-06-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/17/IBM x3850 x3650上多 RAID如何安装CentOS 7/">IBM x3850 x3650上多 RAID 如何安装CentOS 7</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;公司有台IBM 的 x3850需要从 CentOS 6.8 升级到 CentOS 7</p>
-<p>公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.</p>
-<h2 id="0x01-安装准备"><a href="#0x01-安装准备" class="headerlink" title="0x01 安装准备"></a><em>0x01 安装准备</em></h2><ol>
-<li>首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,U盘装太蛋疼了.</li>
-<li>按 F1 进入 Bios 设置后,然后就是选择 boot 顺序,把 CDROM 或者 USB 调到第一.然后commit 退出.</li>
-<li>然后就进入 CentOS 7安装界面了</li>
-</ol>
-<h2 id="0x02-开始安装"><a href="#0x02-开始安装" class="headerlink" title="0x02 开始安装"></a><em>0x02 开始安装</em></h2><ol>
-<li>选择 第一项 Install CentOS 7</li>
-<li>后面就是选中文,选安装的软件 巴拉巴拉之类地球人都会选的东东</li>
-<li>选择安装硬盘, 这里是本文的重点.<br><em>我的这台 x3850比较奇葩 里面有4块300G 的硬盘和4块1T的硬盘 分别组了两套 RAID 5</em><br>3.1 选择磁盘的时候单选一个是不行的,系统提示必须两个都得选中<br>3.2 下面就是坑了,如果你像常规那样删了老的.然后选 LVM 自动或干脆手动.那么你安装的时候一定会遇到’error populating transaction after 10 retries: failure:’这个错.,我在这一步卡了6 7次,装的我都要崩溃了.一开始是以为包兼容性错误,但是选了最小安装还是报这错.后面灵机一动会不会是RAID 的问题.<br>3.3 原来在 CentOS 7中 你建立所有的 / /boot /home 都是默认共用两个磁盘的.所以你一定得手动把这些挂载点手动挂载到单个 RAID(硬盘)上.我是把/ boot /boot-efi 挂到 sda(300G 那套阵列上).其他都放到 sdb 上面<br>3.4 最后就是漫长的等待了,不明白为啥硬件 RAID 怎么还装的这么慢.难道还是要上SSD 么.有高手指教下吗</li>
-</ol>
 
       
     </div>
