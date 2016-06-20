@@ -19,7 +19,7 @@
 查看当前系统内核版本,两种方法皆可
 1234[root@beiyang1 ~]# uname -aLinux beiyang1 2.6.32-642.el6.x86_64">
 <meta property="og:image" content="https://sfault-image.b0.upaiyun.com/125/833/1258330173-54d6e37eac46a">
-<meta property="og:updated_time" content="2016-06-18T14:44:29.000Z">
+<meta property="og:updated_time" content="2016-06-20T02:01:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[原创]记一次CentOS6.5升级内核3.10.X版本">
 <meta name="twitter:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核
@@ -227,8 +227,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核</p>
-<h2 id="0x01-准备工作"><a href="#0x01-准备工作" class="headerlink" title="0x01 准备工作"></a><em>0x01 准备工作</em></h2><ol>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h3><p>&#160; &#160; &#160; &#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核</p>
+<h3 id="0x01-准备工作"><a href="#0x01-准备工作" class="headerlink" title="0x01 准备工作"></a><em>0x01 准备工作</em></h3><ol>
 <li><p>查看当前系统内核版本,两种方法皆可</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@beiyang1 ~]<span class="comment"># uname -a</span></span><br><span class="line">Linux beiyang1 <span class="number">2.6</span>.<span class="number">32</span>-<span class="number">642</span>.el6.x86_64 <span class="comment">#1 SMP Tue May 10 17:27:01 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line">[root@beiyang1 ~]<span class="comment"># uname -r</span></span><br><span class="line"><span class="number">2.6</span>.<span class="number">32</span>-<span class="number">642</span>.el6.x86_64</span><br></pre></td></tr></table></figure>
 </li>
@@ -238,6 +238,9 @@
 <li><p>安装必需的组件</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install vim wget</span><br><span class="line">yum install gcc gcc-c++ xz</span><br><span class="line">yum install bc</span><br><span class="line">yum install ncurses-devel</span><br><span class="line">yum install hmaccalc zlib-devel binutils-devel elfutils-libelf-devel</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<a id="more"></a>
+<ol>
 <li><p>下载内核包(记得目录别错了,下面的操作都是在该目录操作)<br>大家也可以直接打开<a href="https://www.kernel.org/pub/linux/kernel/v3.x/" target="_blank" rel="external">下载目录</a>查找自己喜欢的内核.<br>另外,如果你的服务器不在国外.还是用迅雷下载吧. wget 慢的不行.</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@beiyang1 ~]<span class="comment"># cd /usr/local/src/</span></span><br><span class="line">[root@beiyang1 ~]<span class="comment"># wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.1.tar.xz</span></span><br></pre></td></tr></table></figure>
 </li>

@@ -212,14 +212,7 @@
 <h2 id="0x01-安装准备"><a href="#0x01-安装准备" class="headerlink" title="0x01 安装准备"></a><em>0x01 安装准备</em></h2><ol>
 <li>首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,U盘装太蛋疼了.</li>
 <li>按 F1 进入 Bios 设置后,然后就是选择 boot 顺序,把 CDROM 或者 USB 调到第一.然后commit 退出.</li>
-<li>然后就进入 CentOS 7安装界面了</li>
-</ol>
-<h2 id="0x02-开始安装"><a href="#0x02-开始安装" class="headerlink" title="0x02 开始安装"></a><em>0x02 开始安装</em></h2><ol>
-<li>选择 第一项 Install CentOS 7</li>
-<li>后面就是选中文,选安装的软件 巴拉巴拉之类地球人都会选的东东</li>
-<li>选择安装硬盘, 这里是本文的重点.<br><em>我的这台 x3850比较奇葩 里面有4块300G 的硬盘和4块1T的硬盘 分别组了两套 RAID 5</em><br>3.1 选择磁盘的时候单选一个是不行的,系统提示必须两个都得选中<br>3.2 下面就是坑了,如果你像常规那样删了老的.然后选 LVM 自动或干脆手动.那么你安装的时候一定会遇到’error populating transaction after 10 retries: failure:’这个错.,我在这一步卡了6 7次,装的我都要崩溃了.一开始是以为包兼容性错误,但是选了最小安装还是报这错.后面灵机一动会不会是RAID 的问题.<br>3.3 原来在 CentOS 7中 你建立所有的 / /boot /home 都是默认共用两个磁盘的.所以你一定得手动把这些挂载点手动挂载到单个 RAID(硬盘)上.我是把/ boot /boot-efi 挂到 sda(300G 那套阵列上).其他都放到 sdb 上面<br>3.4 最后就是漫长的等待了,不明白为啥硬件 RAID 怎么还装的这么慢.难道还是要上SSD 么.有高手指教下吗</li>
-</ol>
-
+<li>然后就进入 CentOS 7安装界面了
       
     </div>
     
@@ -232,6 +225,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/20/IBM x3850 x3650上多 RAID如何安装CentOS 7/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -275,8 +272,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核</p>
-<h2 id="0x01-准备工作"><a href="#0x01-准备工作" class="headerlink" title="0x01 准备工作"></a><em>0x01 准备工作</em></h2><ol>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h3><p>&#160; &#160; &#160; &#160;由于 CentOS 6.5内核太老,导致 Docker 等高级技术使用不了,重装系统又会导致生产环境被破坏,无奈之下只能选择升级系统的内核</p>
+<h3 id="0x01-准备工作"><a href="#0x01-准备工作" class="headerlink" title="0x01 准备工作"></a><em>0x01 准备工作</em></h3><ol>
 <li><p>查看当前系统内核版本,两种方法皆可</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@beiyang1 ~]<span class="comment"># uname -a</span></span><br><span class="line">Linux beiyang1 <span class="number">2.6</span>.<span class="number">32</span>-<span class="number">642</span>.el6.x86_64 <span class="comment">#1 SMP Tue May 10 17:27:01 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line">[root@beiyang1 ~]<span class="comment"># uname -r</span></span><br><span class="line"><span class="number">2.6</span>.<span class="number">32</span>-<span class="number">642</span>.el6.x86_64</span><br></pre></td></tr></table></figure>
 </li>
@@ -286,50 +283,7 @@
 <li><p>安装必需的组件</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install vim wget</span><br><span class="line">yum install gcc gcc-c++ xz</span><br><span class="line">yum install bc</span><br><span class="line">yum install ncurses-devel</span><br><span class="line">yum install hmaccalc zlib-devel binutils-devel elfutils-libelf-devel</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>下载内核包(记得目录别错了,下面的操作都是在该目录操作)<br>大家也可以直接打开<a href="https://www.kernel.org/pub/linux/kernel/v3.x/" target="_blank" rel="external">下载目录</a>查找自己喜欢的内核.<br>另外,如果你的服务器不在国外.还是用迅雷下载吧. wget 慢的不行.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@beiyang1 ~]<span class="comment"># cd /usr/local/src/</span></span><br><span class="line">[root@beiyang1 ~]<span class="comment"># wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.1.tar.xz</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解包，进行内核源码目录</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -vxf linux-<span class="number">3.12</span>.<span class="number">17</span>.tar.xz</span><br><span class="line"><span class="built_in">cd</span> linux-<span class="number">3.12</span>.<span class="number">17</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>这里有两条支线 1.用原来的内核配置 2.用自己的配置</p>
-<h4 id="用原来的内核配置"><a href="#用原来的内核配置" class="headerlink" title="用原来的内核配置"></a>用原来的内核配置</h4><p>复制原配置文件到编译目录(前面记下的内核号派上用场了)<br><code>cp /boot/config-2.6.32-642.el6.x86_64 .config</code></p>
-<h4 id="用自己的配置"><a href="#用自己的配置" class="headerlink" title="用自己的配置"></a>用自己的配置</h4><p>!!!!!如果是装 Docker 的孩子别忘了把 Croute 选上. 哎,说多都是泪</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
-</li>
 </ol>
-<p><img src="https://sfault-image.b0.upaiyun.com/125/833/1258330173-54d6e37eac46a" alt=""></p>
-<ol>
-<li><p>编译内核 （需时40-60分钟不等）</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装内核</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make modules_install install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>更改系统启动时，使用的内核<br>注意 网上搜的地址都是<code>/boot/grub/menu.lst</code> 偏偏我的是<code>/boot/efi/EFI/redhat/grub.conf</code><br>所以大家找不到也没关系,用 find 搜索下就行了<br>找到后 vim 一下,修改default=0，开机后，默认以第一项启动（3.10.1内核）<br>保存退出</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name grbu.conf</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重启系统</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shutdown -r now</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>确认当前内核版本</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">　　[root@beiyang1 ~]<span class="comment"># uname -r</span></span><br><span class="line">　　Linux beiyang1 <span class="number">3.10</span>.<span class="number">1</span> <span class="comment">#1 SMP Fri Apr 11 03:32:42 CST 2014 x86_64 x86_64 x86_64 GNU/Linux</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果编译失败，可以先清除，再重新编译</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">　　[root@beiyang1 ~]<span class="comment"># cd /usr/local/src/linux-3.12.17</span></span><br><span class="line">　　[root@beiyang1 ~]<span class="comment"># make mrproper         #完成或者安装过程出错，可以清理上次编译的现场</span></span><br><span class="line">　　[root@beiyang1 ~]<span class="comment"># make clean</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果升级成功后，可以删除源码目录</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　　[root@beiyang1 ~]<span class="comment"># rm -rf /usr/local/src/linux-3.12.17</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看当前有什么内核版本</p>
-</li>
-<li><p>删除原内核</p>
-</li>
-</ol>
-<p>　　[root@beiyang1 ~]# yum remove kernel-2.6.32-431.el6.x86_64 #移除此版本的内核，同时启动菜单也不再会出现此内核<br>　　[root@beiyang1 ~]# yum remove kernel-2.6.32-431.11.2.el6.x86_64</p>
-<p>　　删除后，查看启动菜单会发现已经少了此内核</p>
-<p>　　[root@centos ~]# cat /boot/grub/menu.lst</p>
-
       
     </div>
     
@@ -342,6 +296,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/17/[原创]记一次CentOS6.5升级内核3.10.X版本/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -385,39 +343,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h2><p>&#160; &#160; &#160; &#160;由于最近公司有套系统上线,手上有了几台服务器管理权限,所以想试试传说中的 Docker 和 Rancher.</p>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a><em>0x00 前言</em></h3><p>&#160; &#160; &#160; &#160;由于最近公司有套系统上线,手上有了几台服务器管理权限,所以想试试传说中的 Docker 和 Rancher.</p>
 <p>公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.</p>
-<h2 id="0x01-CentOS-6-5-安装步骤"><a href="#0x01-CentOS-6-5-安装步骤" class="headerlink" title="0x01 CentOS 6.5 安装步骤"></a><em>0x01 CentOS 6.5 安装步骤</em></h2><ol>
+<h3 id="0x01-CentOS-6-5-安装步骤"><a href="#0x01-CentOS-6-5-安装步骤" class="headerlink" title="0x01 CentOS 6.5 安装步骤"></a><em>0x01 CentOS 6.5 安装步骤</em></h3><ol>
 <li><p>首先最好还是先更新下系统</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum update</span><br><span class="line">yum upgrade</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>第二步就比较蛋疼了,需要更新系统内核,由于步骤过长,所以专门开了篇文章来写<br><a href="/2016/06/17/[原创]记一次CentOS6.5升级内核3.10.X版本/">[原创]记一次CentOS6.5升级内核3.10.X版本</a></p>
 </li>
 </ol>
-<h2 id="0x02-CentOS-7-安装步骤"><a href="#0x02-CentOS-7-安装步骤" class="headerlink" title="0x02 CentOS 7 安装步骤"></a><em>0x02 CentOS 7 安装步骤</em></h2><ol>
-<li><p>以直接安装yum提供的 Docker</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然后执行下面命令就可以愉快的玩 Docker 了. 没错,是玩</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker.service</span><br><span class="line">systemctl <span class="built_in">enable</span> docker.service</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>但是yum安装的版本是1.9.X 版本的,不符合我们的文章主旨,所以放弃.<br>另外已经 yum 安装的朋友,要卸载也很简单(本人遇过的坑….以为直接 remove 就行. ).查出你已经安装的模块 然后 yum remove 他们.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum list | grep docker</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-CentOS-7-安装步骤"><a href="#0x02-CentOS-7-安装步骤" class="headerlink" title="0x02 CentOS 7 安装步骤"></a><em>0x02 CentOS 7 安装步骤</em></h3><ol>
+<li>以直接安装yum提供的 Docker<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<hr>
-<ol>
-<li>好了,以下步骤才是安装最近版本的 Docker步骤. 其他Linux 发行版的孩子可以参考 <a href="https://docs.docker.com/linux/step_one/" target="_blank" rel="external">官网教程</a></li>
-</ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://get.docker.com/ | sh</span><br></pre></td></tr></table></figure>
-<ol>
-<li>没错,就一句.我们可爱的 Docker 就安装好了</li>
-</ol>
-<h2 id="0x03-疑难杂症和坑们"><a href="#0x03-疑难杂症和坑们" class="headerlink" title="0x03 疑难杂症和坑们"></a><em>0x03 疑难杂症和坑们</em></h2><p>如果你遇到了以下错误,那肯定是以前用yum 装了老版本,快用上面的方法删干净吧<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Warning: the <span class="string">"docker"</span> <span class="built_in">command</span> appears to already exist on this system.</span><br><span class="line"></span><br><span class="line">If you already have Docker installed, this script can cause trouble, <span class="built_in">which</span> is</span><br><span class="line">why we are displaying this warning and provide the opportunity to cancel the</span><br><span class="line">installation.</span><br><span class="line"></span><br><span class="line">If you installed the current Docker package using this script and are using it</span><br><span class="line">again to update Docker, you can safely ignore this message.</span><br><span class="line"></span><br><span class="line">You may press Ctrl+C now to abort this script.</span><br></pre></td></tr></table></figure></p>
-<p>如果遇到 Docker 启动失败 然后 systemctl status docker.service 发现下列错误</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">firewalld.service - firewalld - dynamic firewall daemon</span><br><span class="line">Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled)</span><br><span class="line">Active: active (running) since 五 <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">16</span> CST; <span class="number">1</span>min <span class="number">40</span>s ago</span><br><span class="line">Main PID: <span class="number">879</span> (firewalld)</span><br><span class="line">CGroup: /system.slice/firewalld.service</span><br><span class="line">└─<span class="number">879</span> /usr/bin/python -Es /usr/sbin/firewalld --nofork --nopid</span><br><span class="line"></span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C POSTROUTING -s 172.17.42.1/16 ! -o docker0 -j MASQUERADE'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -D FORWARD -i docker0 -o docker0 -j DROP'</span> failed: iptables: Bad rule (does a matching rule exist <span class="keyword">in</span> that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -i docker0 -o docker0 -j ACCEPT'</span> failed: iptables: Bad rule (does a matching rule ...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -i docker0 ! -o docker0 -j ACCEPT'</span> failed: iptables: Bad rule (does a matching rul...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT'</span> failed: iptables:...in that chain?).</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -n -L DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C PREROUTING -m addrtype --dst-type LOCAL -j DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t nat -C OUTPUT -m addrtype --dst-type LOCAL -j DOCKER ! --dst 127.0.0.0/8'</span> failed: iptables: No chain...ch by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -n -L DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br><span class="line"><span class="number">12</span>月 <span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> CentosApp firewalld[<span class="number">879</span>]: <span class="number">2015</span>-<span class="number">12</span>-<span class="number">18</span> <span class="number">01</span>:<span class="number">50</span>:<span class="number">24</span> ERROR: COMMAND_FAILED: <span class="string">'/sbin/iptables -t filter -C FORWARD -o docker0 -j DOCKER'</span> failed: iptables: No chain/target/match by that name.</span><br></pre></td></tr></table></figure>
-<p>那就先暂时关掉 firewalld 再启动<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service</span><br></pre></td></tr></table></figure></p>
-
       
     </div>
     
@@ -430,6 +368,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/17/[原创]CentOS6.5安装Docker1.11.X版本/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -473,25 +415,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h4><p>jmpi是段间跳转指令，用于x86实模式下，<br>如：BOOTSEG = 0x0c70<br>    jmpi    4, #BOOTSEG<br>假如当前段CS==00h，那么执行此指令后将跳转到段CS==0x0c70，当然段cs的值也变为0x0c70，接下来将执行指令0x0c70:0004处的指令。</p>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>jmpi是段间跳转指令，用于x86实模式下，<br>如：BOOTSEG = 0x0c70<br>    jmpi    4, #BOOTSEG<br>假如当前段CS==00h，那么执行此指令后将跳转到段CS==0x0c70，当然段cs的值也变为0x0c70，接下来将执行指令0x0c70:0004处的指令。</p>
 <p>例如：<br>jmpi  go,INITSEG</p>
 <p>jmpi为段间跳转指令</p>
 <p>执行这条指令之后</p>
-<p>CS = INITSEG<br>IP = go</p>
-<p>也就是跳转到地址 INITSEG : go</p>
-<p> 实模式下寻址是为了兼容8086处理器，8086是16位CPU(是ALU的数据宽度)，20位地址总线可寻址1M内存空间。其寻址方式：段基址+偏移  的方式，段基址保存在CS、DS、ES等段寄存器内，相当于寻址的高16位，而偏移是内部16位总线提供，在送往外部地址总线时，段基址和偏移合成20位地址，来寻址1M的物理地址空间。</p>
-<p> 合成方式：段基址左移4位，然后加上偏移地址。但还不是一般的相加，由于相加前段基址已经左移4位，变成20位了(最低4位是0)，而偏移还是16位，所以，其实是段基址和偏移的高12位相加，偏移的低4位不变。</p>
-<pre><code> 如：段基址左移4位后：            0x 8880:0
- 偏移地址(0x0440)：     +  0x  044  0
-外部总线20位地址：           0x88c4  0
-</code></pre><p>可看出，这个所谓段式内存管理，并不是纯粹的基址加偏移的方式，据说这是Intel当时欺骗了大家。以下是，我看到的一篇文章中的说法：</p>
-<h4 id="0x01-8086-8088的寻址问题"><a href="#0x01-8086-8088的寻址问题" class="headerlink" title="0x01 8086/8088的寻址问题"></a>0x01 8086/8088的寻址问题</h4><p>　　8088和80286都是16位CPU，Intel当初为什么会警告IBM和盖茨呢？到底发生了什么？</p>
-<p>　　要了解发生了什么，我们要看看处理器的内部，会看到巨大的差异。首先，你找一片８０８８ＣＰＵ，把包装磨掉，磨到ＣＰＵ硅片，放到显微镜下，你会看到8086/88的内部结构，它根本不是一个新的设计，而是两个并联运行的8085（８位）微处理器再多那么一点点。</p>
-<p>　　每个8085有它自己的8位数据和16位寻址能力。结合2个8位数据寄存器假装16位寄存器很容易。事实上这没有任何新东西，RCA COSMAC微处理器就使用16个8位寄存器，可作为内部的8位或16位寄存器使用,你可以有多达16个8位寄存器或8个16位寄存器或两者的任何组合。现在，一个中国的普通ＩＣ厂都可以轻易设计的出来。</p>
-<p>　　可能由于受当时生产工艺所限，８０８８只能有４０个脚，ｉｎｔｅｌ的设计“精英”左思右想，确定了２０条地址线（１Ｍ的寻址空间），而且１６条数据线还要和２０条地址线中的１６条复用（分时复用，即一会是地址线，一会是数据线，对此要想了解，可看８０８８芯片手册的时序部分，也可看８０５２单片机书籍，它的地址线和数据线也是复用的）。</p>
-<p>　　到了问题的实质了，８０８８内的两个８０８５各有一套１６位寻址寄存器，如何让他们寻址２０位的１Ｍ地址呢？其实把他们并在一起形成３２位寻址很简单，如果是那样后来的很多麻烦可能就都没有了（如Ａ２０门），但当时那些“精英”可能认为３２位寻址（４Ｇ地址空间）那是扯淡，估计地球消失了也用不到那么多的内存吧？再说了老板逼的又紧，于是他们采用了在一个硬件上使用两个８０８５非常好实现的方法－－分段：<br>　　他们把１０２４Ｋ地址空间分成１６字节的段，共６４Ｋ个段，用一个８０８５的１６位寻址寄存器作地址偏移寄存器（故段的长度是６４Ｋ），而另一个８０８５的１６位寻址寄存器作１６字节段的段地址寄存器，注意，他保存的不是１６字节段的地址，而是１６字节段的序号（０，１，．．．６５５３５）。</p>
-<p>这样做的好处是：只要在两８０８５ＣＰＵ之间加一个移位器和一个２０位的加法器，就可以完成２０位的地址寻址－－一个８０８５的地址寄存器（段地址－－就是１６字节段的序号）左移４位（＊１６　＝　１６字节小段的首地址），加上另一个８０８５的地址寄存器就可以啦，哈哈！可以向老板交差了，制作成本低，设计速度快，有钱不抢是孙子！至于以后，。。。。</p>
-
+<p>CS = INITSEG<br>IP = go<br>
       
     </div>
     
@@ -504,6 +432,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/02/25/段间跳转指令jmpi和实模式寻址/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -547,12 +479,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h4><p>该笔记基于Linux0.11版，源码可自从网上下载。</p>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>该笔记基于Linux0.11版，源码可自从网上下载。</p>
 <p>参考书籍:</p>
 <ul>
 <li>赵炯《Linux内核完全注释》</li>
 </ul>
-<h4 id="0x01-基础"><a href="#0x01-基础" class="headerlink" title="0x01 基础"></a>0x01 基础</h4>
+<h3 id="0x01-基础"><a href="#0x01-基础" class="headerlink" title="0x01 基础"></a>0x01 基础</h3>
       
     </div>
     
@@ -608,7 +540,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="新的开始"><a href="#新的开始" class="headerlink" title="新的开始"></a>新的开始</h4><p>工作三年才开始写技术博客是晚了点，不过最近感觉个人水平遇到了瓶颈，通过写技术博客相信是能大幅提高自己的水平再也不能小打小闹。</p>
+        <h3 id="新的开始"><a href="#新的开始" class="headerlink" title="新的开始"></a>新的开始</h3><p>工作三年才开始写技术博客是晚了点，不过最近感觉个人水平遇到了瓶颈，通过写技术博客相信是能大幅提高自己的水平再也不能小打小闹。</p>
 <p>一年前也用过hexo，不过那时候对命令行这些不是很熟。 框架搭完，页面出来就算了。这次重新开了域名，希望有一个崭新的开始。</p>
 <p>这个博客主要内容是我未来的学习方向以及随笔，主要有Python Linux Docker。</p>
 

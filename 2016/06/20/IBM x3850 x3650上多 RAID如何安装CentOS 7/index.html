@@ -18,7 +18,7 @@
 公司内网内有5台服务器,其中4台都是 CentOS 6.5 一台 CentOS 7. 准备齐齐装上 Docker.
 0x01 安装准备
 首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,">
-<meta property="og:updated_time" content="2016-06-20T01:55:56.000Z">
+<meta property="og:updated_time" content="2016-06-20T02:00:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IBM x3850 x3650上多 RAID 如何安装CentOS 7">
 <meta name="twitter:description" content="0x00 前言&amp;#160; &amp;#160; &amp;#160; &amp;#160;公司有台IBM 的 x3850需要从 CentOS 6.8 升级到 CentOS 7
@@ -231,9 +231,8 @@
 <h2 id="0x01-安装准备"><a href="#0x01-安装准备" class="headerlink" title="0x01 安装准备"></a><em>0x01 安装准备</em></h2><ol>
 <li>首先需要 CentOS 7 的光盘一张, 我的是1511版本.如果服务器上没光驱,还是申请个 USB 光驱吧,U盘装太蛋疼了.</li>
 <li>按 F1 进入 Bios 设置后,然后就是选择 boot 顺序,把 CDROM 或者 USB 调到第一.然后commit 退出.</li>
-<li>然后就进入 CentOS 7安装界面了</li>
-</ol>
-<h2 id="0x02-开始安装"><a href="#0x02-开始安装" class="headerlink" title="0x02 开始安装"></a><em>0x02 开始安装</em></h2><ol>
+<li>然后就进入 CentOS 7安装界面了<a id="more"></a>
+<h2 id="0x02-开始安装"><a href="#0x02-开始安装" class="headerlink" title="0x02 开始安装"></a><em>0x02 开始安装</em></h2></li>
 <li>选择 第一项 Install CentOS 7</li>
 <li>后面就是选中文,选安装的软件 巴拉巴拉之类地球人都会选的东东</li>
 <li>选择安装硬盘, 这里是本文的重点.<br><em>我的这台 x3850比较奇葩 里面有4块300G 的硬盘和4块1T的硬盘 分别组了两套 RAID 5</em><br>3.1 选择磁盘的时候单选一个是不行的,系统提示必须两个都得选中<br>3.2 下面就是坑了,如果你像常规那样删了老的.然后选 LVM 自动或干脆手动.那么你安装的时候一定会遇到’error populating transaction after 10 retries: failure:’这个错.,我在这一步卡了6 7次,装的我都要崩溃了.一开始是以为包兼容性错误,但是选了最小安装还是报这错.后面灵机一动会不会是RAID 的问题.<br>3.3 原来在 CentOS 7中 你建立所有的 / /boot /home 都是默认共用两个磁盘的.所以你一定得手动把这些挂载点手动挂载到单个 RAID(硬盘)上.我是把/ boot /boot-efi 挂到 sda(300G 那套阵列上).其他都放到 sdb 上面<br>3.4 最后就是漫长的等待了,不明白为啥硬件 RAID 怎么还装的这么慢.难道还是要上SSD 么.有高手指教下吗</li>
